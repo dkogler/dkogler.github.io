@@ -20,13 +20,12 @@
  */
 
 function reverseString(input) {
-    // YOUR CODE GOES BELOW HERE //
-    var output = "";
-    for (var i = input.length-1; i >= 0; i--){
-      output += input[i];
-    }
-    return output;
     
+    var tempArr = input.split("");
+    tempArr.reverse();
+    var ret = tempArr.join("");
+    
+    return ret;
     
     // YOUR CODE GOES ABOVE HERE //
 }

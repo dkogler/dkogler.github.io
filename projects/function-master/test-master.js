@@ -3,14 +3,13 @@
   QUnit.test( "Our First Test", function( assert ) {
     var value = "hello tests";
     var some_number = 484;
-
     //                     ┌ Change this to what it should be
     assert.equal( value, 'hello tests');
     //                           ┌ Change this to what it should be
     assert.equal( some_number, 484);
   });
 
-  QUnit.test("Functions can access outer scope.", function(assert){
+ QUnit.test("Functions can access outer scope.", function(assert){
     var outside_the_function = null;
     function yay(){
       var inside_the_function = "can you see me?";

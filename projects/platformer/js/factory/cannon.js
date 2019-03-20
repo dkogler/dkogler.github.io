@@ -23,6 +23,9 @@
             return projectile;
         }
         
+        // here is the top scale
+        var topScale = 2;
+        
         function configureTween(tween, projectile, cannon) {
             tween.onStart.addOnce(function() {
                 projectile.alpha = 1;
@@ -40,6 +43,7 @@
                cannon.anchor.setTo(0.5, 0.5);
                cannon.scale.y = -1;
                let projectile = createProjectile(cannon.x, cannon.y);
+               projectile.scale.y = topScale === 1 ? 1 : 100;
                let tween = game.add.tween(projectile).to( { y: game.world.height + projectile.height }, 2000, Phaser.Easing.Bounce.Out, true, delay || 0, -1);
                configureTween(tween, projectile, cannon);
                return cannon;
@@ -50,7 +54,9 @@
                cannon.anchor.setTo(0.5, 0.5);
                let projectile = game.projectile.create(cannon.x, cannon.y, assetKeyProjectile);
                projectile.anchor.setTo(0.5, 0.5);
-               projectile.scale.y = -1;
+               let scale = topScale === 1 ? 1 : 10;
+               projectile.scale.y = -scale;
+               projectile.scale.x = scale;
                projectile.alpha = 0;
                let tween = game.add.tween(projectile).to( { y: 0 + projectile.height }, 2000, Phaser.Easing.Bounce.Out, true, delay || 0, -1);
                configureTween(tween, projectile, cannon);

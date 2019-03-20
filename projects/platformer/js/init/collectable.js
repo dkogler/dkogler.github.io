@@ -35,13 +35,13 @@
         // ALL YOUR CODE GOES BELOW HERE ///////////////////////////////////////
         
         // example: 
-        collectable.create(type.kennedi, 200, 150);
-        collectable.create(type.grace, 780, 250);
-        collectable.create(type.steve, 200, 350);
-        collectable.create(type.max, 800, 400);
-        collectable.create(type.db, 750, game.world.height - 82);
-        collectable.create(type.db, 700, game.world.height - 82);
-        collectable.create(type.db, 800, game.world.height - 82);
+        let bounce = 10000;
+        
+        collectable.create(type.kennedi, 200, 50, 0.1, bounce);
+        collectable.create(type.steve, 800, 50);
+        collectable.create(type.db, 850, 500, 0.2, bounce);
+        collectable.create(type.db, 800, 500, 0.1, bounce);
+        collectable.create(type.db, 750, 500, 0.07, bounce);
 
         
         

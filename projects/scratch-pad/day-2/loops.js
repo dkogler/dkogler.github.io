@@ -6,13 +6,26 @@
  * IN CLASS EXERCISE: LOOPS
  */
 
+
+function getObjectKeys2(object) {
+  
+  var arr = [];
+  for (var key in object){
+    arr.push(key);
+  }
+  console.log(arr);
+  return arr;
+  
+}
+
+
 /** 
  * Given an input Array, loop forward over the Array and print its values 
  * using console.log().
  */
 function printArrayValues(array) {
   // YOUR CODE BELOW HERE //
-  for(var i in array){
+  for(var i = 0; i <= array.length - 1; i++){
     console.log(array[i]);
   }
   
@@ -20,6 +33,10 @@ function printArrayValues(array) {
   
   // YOUR CODE ABOVE HERE //
 }
+
+
+
+
 
 /** 
  * Given an input Array, loop backwards over the Array and print its values 

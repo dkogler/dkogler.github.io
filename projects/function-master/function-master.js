@@ -106,20 +106,26 @@ function profileInfo(object) {
 //////////////////////////////////////////////////////////////////////
 
 function maybeNoises(object) {
-    for (var key in object){
-        if (key === "noises"){
-            if (Array.isArray(object[key])) {
-                if (object[key].length > 0){
-                    var retString = "";
-                    for (var i = 0; i < object[key].length - 1; i++){
-                        retString += object[key][i] + " ";
-                    }
-                    retString += object[key][object[key].length-1];
-                    return retString;
-                }
-            }
-        }
+    
+    if (Array.isArray(object.noises) && object.noises.length > 0){
+        var noise = object.noises.join(" ");
+        return noise;
     }
+    return "there are no noises";
+    // for (var key in object){
+    //     if (key === "noises"){
+    //         if (Array.isArray(object[key])) {
+    //             if (object[key].length > 0){
+    //                 var retString = "";
+    //                 for (var i = 0; i < object[key].length - 1; i++){
+    //                     retString += object[key][i] + " ";
+    //                 }
+    //                 retString += object[key][object[key].length-1];
+    //                 return retString;
+    //             }
+    //         }
+    //     }
+    // }
     return "there are no noises";
 }
 

@@ -8,8 +8,8 @@ var init = function (window) {
         canvas = app.canvas, 
         view = app.view,
         fps = draw.fps('#000');
-        
-    
+
+
     window.opspark.makeRunner = function() {
         
         window.opspark.runner = {};
@@ -23,11 +23,19 @@ var init = function (window) {
         var circle;
         var circles = [];
 
+        var extra = draw.bitmap("img/tree.png");
+        view.addChild(extra);
+    
         // TODO 2 : Create a function that draws a circle  //
         var drawCircle = function() {
             // TODO 2: Draw a circle //
             circle = draw.randomCircleInArea(canvas, true, true, '#999', 2);
+            //circle = draw.bitmap("img/tree.png");
+            circle.x = Math.random()*canvas.width;
+            circle.y = Math.random()*canvas.height;
+            
             physikz.addRandomVelocity(circle, canvas, 10, 10);
+            circle.rotationalVelocity = 0;
             view.addChild(circle);
             circles.push(circle);
             // other code...
@@ -48,21 +56,21 @@ var init = function (window) {
             // TODO 5 : YOUR CODE STARTS HERE //////////////////////
             
             // if the circle has gone out the right side of the screen then place it off-screen left
-            if ( circle.x > canvas.width + circle.radius ) {
-                circle.x = 0 - circle.radius;
+            if ( circle.x > canvas.width) {
+                circle.x = 0 - 0;
             } 
             // TODO 5a) if the circle has gone out of the left side of the screen then place it off-screen right
-            else if ( circle.x < 0 - circle.radius) {
-                circle.x = canvas.width + circle.radius;
+            else if ( circle.x < 0 - 0) {
+                circle.x = canvas.width + 0;
             } 
 
             // TODO 5b) if the circle has gone out of the top side of the screen then place it off-screen bottom
-            if ( circle.y < 0 - circle.radius ) {
-                circle.y = canvas.height + circle.radius;
+            if ( circle.y < 0 - 0 ) {
+                circle.y = canvas.height + 0;
             }
             // TODO 5c) if the circle has gone out of the bottom side of the screen then place it off-screen top 
-            else if ( circle.y > canvas.height + circle.radius ) {
-                circle.y = 0 - circle.radius;
+            else if ( circle.y > canvas.height + 0 ) {
+                circle.y = 0 - 0;
             }
             // YOUR TODO 5 CODE ENDS HERE //////////////////////////
         }
