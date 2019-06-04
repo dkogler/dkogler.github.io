@@ -23,7 +23,7 @@ var _ = {};
 
 _.identity = function (value) {
     return value;
-}
+};
 
 /** _.typeOf
 * Arguments:
@@ -58,7 +58,7 @@ _.typeOf = function (value) {
     else {
         return typeof value;
     }
-}
+};
 
 /** _.first
 * Arguments:
@@ -93,7 +93,7 @@ _.first = function(arr, num) {
         newArr.push(arr[i]);
     }
     return newArr;
-}
+};
 
 /** _.last
 * Arguments:
@@ -128,7 +128,7 @@ _.last = function(arr, num) {
         newArr.push(arr[i]);
     }
     return newArr;
-}
+};
 
 /** _.indexOf
 * Arguments:
@@ -156,7 +156,7 @@ _.indexOf = function (arr, val) {
         }
     }
     return -1;
-}
+};
 
 /** _.contains
 * Arguments:
@@ -183,7 +183,7 @@ _.contains = function (arr, val) {
         }
     }
     return false;
-}
+};
 
 /** _.each
 * Arguments:
@@ -207,7 +207,8 @@ _.each = function (col, fun) {
             fun(col[entry], entry, col);
         }
     }
-}
+    return col;
+};
 
 /** _.unique
 * Arguments:
@@ -227,7 +228,7 @@ _.unique = function (arr) {
         }
     }
     return out;
-}
+};
 
 /** _.filter
 * Arguments:
@@ -258,7 +259,7 @@ _.filter = function (arr, fun) {
         }
     }
     return out;
-}
+};
 
 /** _.reject
 * Arguments:
@@ -286,7 +287,7 @@ _.reject = function (arr, fun) {
         }
     }
     return out;
-}
+};
 
 /** _.partition
 * Arguments:
@@ -308,17 +309,8 @@ _.reject = function (arr, fun) {
 */
 
 _.partition = function (arr, fun) {
-    var out = [[], []];
-    for (var ent in arr){
-        if (fun(arr[ent])) {
-            out[0].push(arr[ent]);
-        }
-        else {
-            out[1].push(arr[ent]);
-        }
-    }
-    return out;
-}
+    return [_.filter(arr, fun), _.reject(arr, fun)];
+};
 
 /** _.map
 * Arguments:
@@ -338,13 +330,11 @@ _.partition = function (arr, fun) {
 
 _.map = function (col, fun) {
     var ret = [];
-    if (typeof col === 'object'){
-        for (var entry in col){
-            ret.push(fun(col[entry], entry, col));
-        }
+    for (var entry in col){
+        ret.push(fun(col[entry], entry, col));
     }
     return ret;
-}
+};
 
 /** _.pluck
 * Arguments:
@@ -362,7 +352,7 @@ _.pluck = function (arr, prop) {
         return val[prop];
     }
     return _.map(arr, getProp);
-}
+};
 
 /** _.every
 * Arguments:
@@ -389,15 +379,26 @@ _.every = function (col, fun) {
     if (fun === undefined) {
         fun = function (val, entry, col) {
             return val;
-        }
+        };
     }
-    for (var entry in col) {
-        if (!fun(col[entry], entry, col)){
-            return false;
+    
+    let res = true;
+    let gather = function (val, entry, col) {
+        if (!fun(val, entry, col)) {
+            res = false;
         }
-    }
-    return true;
-}
+    };
+    _.each(col, gather);
+    return res;
+    
+    // if (res.contains)
+    // for (var entry in col) {
+    //     if (!fun(col[entry], entry, col)){
+    //         return false;
+    //     }
+    // }
+    // return true;
+};
 
 
 /** _.some
@@ -425,7 +426,7 @@ _.some = function (col, fun) {
     if (fun === undefined) {
         fun = function (val, entry, col) {
             return val;
-        }
+        };
     }
     for (var entry in col) {
         if (fun(col[entry], entry, col)){
@@ -433,7 +434,7 @@ _.some = function (col, fun) {
         }
     }
     return false;
-}
+};
 
 /** _.reduce
 * Arguments:
@@ -464,7 +465,7 @@ _.reduce = function(arr, fun, seed) {
         last = fun(last, arr[i], i);
     }
     return last;
-}
+};
 
 /** _.extend
 * Arguments:
@@ -489,7 +490,7 @@ _.extend = function () {
         }
     }
     return obj;
-}
+};
 
 /******************************************************************************/
 
@@ -500,7 +501,7 @@ _.defaults = function (obj, defaults) {
         }
     }
     return obj;
-}
+};
 
 _.once = function (fun) {
     var result;
@@ -512,14 +513,14 @@ _.once = function (fun) {
         }
 
         return result;
-    }
-}
+    };
+};
 
 _.memoize = function (fun, hash) {
     if (hash === undefined){
         hash = function () { 
             return arguments[0];
-        }
+        };
     }
     var results = {};
     return function () {
@@ -529,14 +530,14 @@ _.memoize = function (fun, hash) {
         }
         results[h] = fun.apply(this, arguments);
         return results[h];
-    }
-}
+    };
+};
 
 _.delay = function (fun, wait, args) {
     return setTimeout(function () {
         return fun.apply(null, args);
     }, wait);
-}
+};
 
 _.shuffle = function (arr) {
     var lastIndex = arr.length;
@@ -551,7 +552,7 @@ _.shuffle = function (arr) {
         arr[lastIndex] = temp;
     }
     return arr;
-}
+};
 
 /******************************************************************************/
 
@@ -565,7 +566,7 @@ _.invoke = function (list, fun, args) {
 
         return fun.apply(null, pass);
     });
-}
+};
 
 _.sortBy = function (arr, criteria) {
 
@@ -587,7 +588,7 @@ _.sortBy = function (arr, criteria) {
     }
     
     return arr;
-}
+};
 
 _.zip = function (arr) {
     var ret = [];
@@ -601,7 +602,7 @@ _.zip = function (arr) {
         }
     }
     return ret;
-}
+};
 
 _.flatten = function (arr, shallow) {
     var ret = [];
@@ -619,7 +620,7 @@ _.flatten = function (arr, shallow) {
         }
     }
     return ret;
-}
+};
 
 _.intersection = function (arr) {
     var ret = [];
@@ -643,7 +644,7 @@ _.intersection = function (arr) {
         }
     }
     return ret;
-}
+};
 
 _.difference = function (arr, other) {
     var ret = [];
@@ -667,7 +668,7 @@ _.difference = function (arr, other) {
         }
     }
     return ret;
-}
+};
 
 _.throttle = function (fun, wait) {
     var previous = 0, result;
@@ -682,10 +683,10 @@ _.throttle = function (fun, wait) {
         }
         console.log(result);
         return result;
-    }
+    };
     
     return throttled;
-}
+};
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
@@ -695,4 +696,23 @@ if((typeof process !== 'undefined') &&
    (typeof process.versions.node !== 'undefined')) {
     // here, export any references you need for tests //
     module.exports = _;
+    module.exports.identity = _.identity;
+    module.exports.typeOf = _.typeOf;
+    module.exports.first = _.first;
+    module.exports.last = _.last;
+    module.exports.indexOf = _.indexOf;
+    module.exports.contains = _.contains;
+    module.exports.each = _.each;
+    module.exports.unique = _.unique;
+    module.exports.filter = _.filter;
+    module.exports.reject = _.reject;
+    module.exports.partition = _.partition;
+    module.exports.map = _.map;
+    module.exports.pluck = _.pluck;
+    module.exports.every = _.every;
+    module.exports.some = _.some;
+    module.exports.reduce = _.reduce;
+    module.exports.extend = _.extend;
+
+
 }
