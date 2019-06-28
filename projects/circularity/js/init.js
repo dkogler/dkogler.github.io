@@ -24,7 +24,7 @@ var init = function (window) {
         var circles = [];
 
         var extra = draw.bitmap("img/tree.png");
-        view.addChild(extra);
+        //view.addChild(extra);
     
         // TODO 2 : Create a function that draws a circle  //
         var drawCircle = function() {
@@ -35,7 +35,7 @@ var init = function (window) {
             circle.y = Math.random()*canvas.height;
             
             physikz.addRandomVelocity(circle, canvas, 10, 10);
-            circle.rotationalVelocity = 0;
+            //circle.rotationalVelocity = 0;
             view.addChild(circle);
             circles.push(circle);
             // other code...
