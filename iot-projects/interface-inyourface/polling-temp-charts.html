@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Polling Temperature Charts</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript"
+  src="https://www.google.com/jsapi?autoload={
+    'modules':[{
+      'name':'visualization',
+      'version':'1',
+      'packages':['corechart']
+    }]
+  }"></script>
+  <style>
+    body {
+        color: rgb(45, 45, 45);
+        padding: 10px;
+        font-family: arial;
+    }
+    header {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+    #all-contents {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    /* navigation menu */
+    nav {
+        background: rgb(239, 80, 41);
+        margin: 0 auto;
+        margin-bottom: 20px;
+        display: flex;
+        padding: 10px;
+        border: 4px solid green;
+        border-radius: 20px;
+    }
+    nav header {
+        display: flex;
+        align-items: center;
+        color: rgb(255, 255, 255);
+        flex: 1;
+    }
+    nav ul {
+        list-style-image: none;
+    }
+    nav li {
+        display: inline-block;
+        padding: 0 10px;
+    }
+    nav a {
+        text-decoration: none;
+        color: #fff;
+    }
+    main {
+        background: rgb(245, 238, 219);
+        display: flex;
+    }
+    #sched-chart-container {
+        margin-right: 25px;
+        padding: 10px;
+        width: 40%;
+    }
+    #ws-chart-container {
+        margin-right: 25px;
+        padding: 10px;
+        width: 40%;
+    }
+    #sched-chart {
+        margin-right: 25px;
+        padding: 10px;
+        width: 100%;
+        height: 300px;
+    }
+    #ws-chart {
+        margin-right: 25px;
+        padding: 10px;
+        width: 100%;
+        height: 300px;
+    }
+    p {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <nav>
+      <header>Polling Temperature Charts</header>
+      <ul>
+          <li><a href="polling-temp-charts.html">Polling Temperature Charts</a></li>
+          <li><a href="actuator-form.html">Actuator Form</a></li>
+          <li><a href="device-parser.html">Device Parser</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main>
+    <div id="sched-chart-container">
+      <div id="sched-chart"></div>
+    </div>
+    <div id="ws-chart-container">
+      <div id="ws-chart"></div>
+    </div>
+  </main>
+  <script type="text/javascript">
+
+  $(document).ready(function () {
+    var schedHighest = -500, schedLowest = 500, wsHighest = -500, wsLowest = 500;
+    var maxDataPoints = 10;
+    var schedChart = new google.visualization.LineChart($('#sched-chart')[0]);
+    var wsChart = new google.visualization.LineChart($('#ws-chart')[0]);
+    var schedData = google.visualization.arrayToDataTable([
+      ['Time', 'Temperature'],
+      [getTime(), 0]
+    ]); 
+    var wsData = google.visualization.arrayToDataTable([
+      ['Time', 'Temperature'],
+      [getTime(), 0]
+    ]);
+ 
+    $('#sched-chart-container').append($("<p>").attr("id", "sched-highest").text("Highest recorded value is 0"));
+    $('#sched-chart-container').append($("<p>").attr("id", "sched-lowest").text("Lowest recorded value is 0"));
+    $('#ws-chart-container').append($("<p>").attr("id", "ws-highest").text("Highest recorded value is 0"));
+    $('#ws-chart-container').append($("<p>").attr("id", "ws-lowest").text("Lowest recorded value is 0"));
+
+    var options = {
+      title: 'Temperature',
+      curveType: 'function',
+      animation: {
+        duration: 1000,
+        easing: 'in'
+      },
+      legend: {position: 'bottom'}
+    };
+
+    function addDataPoint(dataPoint, dataSet, chart) {
+      if (dataSet.getNumberOfRows() > maxDataPoints) {
+        dataSet.removeRow(0);
+      }
+      dataSet.addRow([getTime(), dataPoint.value]);
+      chart.draw(dataSet, options);
+    }
+
+    function updateRecords(value, which) {
+      if (which === "sched") {
+        if (value > schedHighest) {
+          schedHighest = value;
+          $("#sched-highest").text("Highest recorded value is " + value);
+        }
+        if (value < schedLowest) {
+          schedLowest = value;
+          $("#sched-lowest").text("Lowest recorded value is " + value);
+        }
+      }
+      else if (which === "ws") {
+        if (value > wsHighest) {
+          wsHighest = value;
+          $("#ws-highest").text("Highest recorded value is " + value);
+        }
+        if (value < wsLowest) {
+          wsLowest = value;
+          $("#ws-lowest").text("Lowest recorded value is " + value);
+        }
+      }
+    }
+
+    function getTime() {
+      var d = new Date();
+      return d.toLocaleTimeString();
+    }
+
+    function doPoll() {
+      $.getJSON('http://devices.webofthings.io/pi/sensors/temperature/value',
+        function (result) {
+          addDataPoint(result, schedData, schedChart);
+          updateRecords(result.value, "sched");
+          setTimeout(doPoll, 10000);
+        });
+    }
+
+    doPoll();
+
+    var socket = new WebSocket('ws://devices.webofthings.io/pi/sensors/temperature'); //#A
+
+    socket.onmessage = function (event) { //#B
+      var result = JSON.parse(event.data);
+      addDataPoint(result, wsData, wsChart);
+      updateRecords(result.value, "ws");
+    };
+
+    socket.onerror = function (error) { //#C
+      console.log('WebSocket error!');
+      console.log(error);
+    };
+  });
+
+  </script>
+
+</body>
+</html>
