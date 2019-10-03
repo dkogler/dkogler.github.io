@@ -13,7 +13,7 @@ http.createServer(function(req, res) {
     let startTime = d.getTime();
 
     // TODO 11: Make the whole thing parallel
-    async.series( 
+    async.parallel( 
         // TODO 8: Supply an array of functions
         [
             function(callback){
