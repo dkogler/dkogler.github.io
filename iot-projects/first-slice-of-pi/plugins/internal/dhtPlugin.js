@@ -1,4 +1,4 @@
-var resources = require('./../../resources/sensor');
+var resources = require('./../../resources/model');
 
 var sensor;
 var model = resources.pi.sensors.dht;
