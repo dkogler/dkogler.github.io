@@ -1,7 +1,7 @@
 var resources = require('./../../resources/model');
 
 var sensor;
-var model = resources.pi.sensors.dht;
+var device = resources.pi.sensors.dht;
 var pluginName = resources.pi.sensors.dht.name;
 var localParams = {'frequency': 2000};
 
@@ -19,12 +19,12 @@ function connectHardware() {
 	var sensorDriver = require('node-dht-sensor');
 	sensor = {
 		initialize: function () {
-			return sensorDriver.initialize(model.model, model.gpio);
+			return sensorDriver.initialize(device.model, device.gpio);
 		},
 		read: function () {
 			var readout = sensorDriver.read();
-			model.temperature.value = parseFloat(readout.temperature.toFixed(2));
-			model.humidity.value = parseFloat(readout.humidity.toFixed(2));
+			device.temperature.value = parseFloat(readout.temperature.toFixed(2));
+			device.humidity.value = parseFloat(readout.humidity.toFixed(2));
 			
 			setTimeout(function () {
 				sensor.read();
