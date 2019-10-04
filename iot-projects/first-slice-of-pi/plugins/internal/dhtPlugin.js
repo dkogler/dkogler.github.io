@@ -6,7 +6,7 @@ var pluginName = resources.pi.sensors.dht.name;
 var localParams = {'frequency': 2000};
 
 exports.start = function (params) {
-	localParams = params;
+	localParams = params ? params : localParams;
 	connectHardware();
 	console.log("starting " + pluginName + " plugin");
 };
