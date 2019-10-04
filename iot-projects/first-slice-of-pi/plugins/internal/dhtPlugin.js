@@ -25,7 +25,6 @@ function connectHardware() {
 			var readout = sensorDriver.read();
 			model.temperature.value = parseFloat(readout.temperature.toFixed(2));
 			model.humidity.value = parseFloat(readout.humidity.toFixed(2));
-			console.log("Temperature: " + sensor.temperature.value + ", Humidity: " + sensor.humidity.value);
 			
 			setTimeout(function () {
 				sensor.read();
