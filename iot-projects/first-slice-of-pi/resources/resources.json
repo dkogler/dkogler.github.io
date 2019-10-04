@@ -14,6 +14,7 @@
 			},
 			"dht": {
 				"name": "DHT22 Sensor",
+				"model": 22,
 				"description": "A dual temperature and humidity sensor",
 				"gpio": 17,
 				"temperature": {
