@@ -1,24 +1,11 @@
 // /////////////////////////////////////////////////////////////////////////////
 // flatten /////////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////////////////
-require('helpers.js');
 
-function flatten(arr, shallow) {
-  var ret = [];
-  for (var i = 0; i < arr.length; i++) {
-      if (Array.isArray(arr[i])) {
-          if (shallow === true) {
-              ret = ret.concat(arr[i]);
-          }
-          else {
-              ret = ret.concat(flatten(arr[i]));
-          }
-      }
-      else {
-          ret.push(arr[i]);
-      }
-  }
-  return ret;
+function flatten(arr) {
+  return arr.reduce(function(final, sub){
+    return final.concat(sub);
+  }, []);
 }
 
 
@@ -55,11 +42,15 @@ function every(col, fun) {
 // /////////////////////////////////////////////////////////////////////////////
 
 function dominantDirection(string) {
-  let results = [];
-  for (let i = 0; i < string.length; i++){
-    results.push(characterScript(string[i]));
+  let scripts = [];
+  for (var i = 0; i < string.length; i++) {
+    scripts.push(characterScript(string.codePointAt(i)));
+    console.log(string.codePointAt(i));
   }
-  console.log(results);
+  var direction = scripts.reduce(function(dir, next){
+    return dir + (next !== null ? (next.direction === 'ltr' ? 1 : -1) : 0);
+  }, 0);
+  return direction >= 0 ? 'ltr': 'rtl';
 }
 
 // /////////////////////////////////////////////////////////////////////////////
