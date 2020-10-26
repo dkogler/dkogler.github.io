@@ -14,7 +14,6 @@ function runProgram(){
         DOWN: 40,
         W: 87,
         S: 83,
-        SPACE: 32,
     };
 
     var boardWidth = $('#board').width();
