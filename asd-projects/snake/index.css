@@ -1,0 +1,55 @@
+
+body {
+    background-color: darkgreen;
+}
+
+#board {
+    width: 440px;
+    height: 440px;
+    border: 1px solid white;
+    background-color: black;
+    position: relative;
+}
+
+#apple {
+    background-image: url('https://pngimg.com/uploads/apple_logo/apple_logo_PNG19670.png');
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    position: absolute;
+}
+
+#snakeHead {
+    background-image: url('https://image.flaticon.com/icons/png/512/518/518713.png');
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    position: absolute;
+}
+
+.snakeBody {
+    background-image: url('https://w7.pngwing.com/pngs/740/96/png-transparent-create-computer-icons-windows-furniture-computer-wallpaper-windows.png');
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+    position: absolute;
+}
+
+#gameOver {
+    color: red;
+    font-size: 40px;
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
+}
+
+#score {
+    color: white;
+    background: black;
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+}

@@ -40,31 +40,31 @@ function runProgram(){
     Called in response to events.
     */
     function handleKeyDown(event) {
-        if (event.keyCode == KEY.LEFT){
+        if (event.keyCode === KEY.LEFT){
             speedX -= 5;
         }
-        else if (event.keyCode == KEY.RIGHT){
+        else if (event.keyCode === KEY.RIGHT){
             speedX += 5;
         }
-        else if (event.keyCode == KEY.UP){
+        else if (event.keyCode === KEY.UP){
             speedY -= 5;
         }
-        else if (event.keyCode == KEY.DOWN){
+        else if (event.keyCode === KEY.DOWN){
             speedY += 5;
         }
     }
 
     function handleKeyUp(event) {
-        if (event.keyCode == KEY.LEFT){
+        if (event.keyCode === KEY.LEFT){
             speedX = 0;
         }
-        else if (event.keyCode == KEY.RIGHT){
+        else if (event.keyCode === KEY.RIGHT){
             speedX = 0;
         }
-        else if (event.keyCode == KEY.UP){
+        else if (event.keyCode === KEY.UP){
             speedY = 0;
         }
-        else if (event.keyCode == KEY.DOWN){
+        else if (event.keyCode === KEY.DOWN){
             speedY = 0;
         }
     }
