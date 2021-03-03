@@ -3,15 +3,10 @@
 
 <head>
   <title>Polling Temperature Charts</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script type="text/javascript"
-  src="https://www.google.com/jsapi?autoload={
-    'modules':[{
-      'name':'visualization',
-      'version':'1',
-      'packages':['corechart']
-    }]
-  }"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
   <style>
     body {
         color: rgb(45, 45, 45);
@@ -107,95 +102,102 @@
     </div>
   </main>
   <script type="text/javascript">
+    
 
   $(document).ready(function () {
     var schedHighest = -500, schedLowest = 500, wsHighest = -500, wsLowest = 500;
     var maxDataPoints = 10;
-    var schedChart = new google.visualization.LineChart($('#sched-chart')[0]);
-    var wsChart = new google.visualization.LineChart($('#ws-chart')[0]);
-    var schedData = google.visualization.arrayToDataTable([
-      ['Time', 'Temperature'],
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.setOnLoadCallback(drawVisualization);
+    function drawVisualization(){
+      var schedChart = new google.visualization.LineChart($('#sched-chart')[0]);
+      var wsChart = new google.visualization.LineChart($('#ws-chart')[0]);
+      var schedData = google.visualization.arrayToDataTable([
+        ['Time', 'Temperature'],
       [getTime(), 0]
-    ]); 
-    var wsData = google.visualization.arrayToDataTable([
-      ['Time', 'Temperature'],
-      [getTime(), 0]
-    ]);
+      ]); 
+      var wsData = google.visualization.arrayToDataTable([
+        ['Time', 'Temperature'],
+        [getTime(), 0]
+      ]);
+    
  
-    $('#sched-chart-container').append($("<p>").attr("id", "sched-highest").text("Highest recorded value is 0"));
-    $('#sched-chart-container').append($("<p>").attr("id", "sched-lowest").text("Lowest recorded value is 0"));
-    $('#ws-chart-container').append($("<p>").attr("id", "ws-highest").text("Highest recorded value is 0"));
-    $('#ws-chart-container').append($("<p>").attr("id", "ws-lowest").text("Lowest recorded value is 0"));
+      $('#sched-chart-container').append($("<p>").attr("id", "sched-highest").text("Highest recorded value is 0"));
+      $('#sched-chart-container').append($("<p>").attr("id", "sched-lowest").text("Lowest recorded value is 0"));
+      $('#ws-chart-container').append($("<p>").attr("id", "ws-highest").text("Highest recorded value is 0"));
+      $('#ws-chart-container').append($("<p>").attr("id", "ws-lowest").text("Lowest recorded value is 0"));
 
-    var options = {
-      title: 'Temperature',
-      curveType: 'function',
-      animation: {
-        duration: 1000,
-        easing: 'in'
-      },
-      legend: {position: 'bottom'}
-    };
+      var options = {
+        title: 'Temperature',
+        curveType: 'function',
+        animation: {
+          duration: 1000,
+          easing: 'in'
+        },
+        legend: {position: 'bottom'}
+      };
 
-    function addDataPoint(dataPoint, dataSet, chart) {
-      if (dataSet.getNumberOfRows() > maxDataPoints) {
-        dataSet.removeRow(0);
+      function addDataPoint(dataPoint, dataSet, chart) {
+        if (dataSet.getNumberOfRows() > maxDataPoints) {
+          dataSet.removeRow(0);
+        }
+        dataSet.addRow([getTime(), dataPoint.value]);
+        chart.draw(dataSet, options);
       }
-      dataSet.addRow([getTime(), dataPoint.value]);
-      chart.draw(dataSet, options);
-    }
 
-    function updateRecords(value, which) {
-      if (which === "sched") {
-        if (value > schedHighest) {
-          schedHighest = value;
-          $("#sched-highest").text("Highest recorded value is " + value);
+      function updateRecords(value, which) {
+        if (which === "sched") {
+          if (value > schedHighest) {
+            schedHighest = value;
+            $("#sched-highest").text("Highest recorded value is " + value);
+          }
+          if (value < schedLowest) {
+            schedLowest = value;
+            $("#sched-lowest").text("Lowest recorded value is " + value);
+          }
         }
-        if (value < schedLowest) {
-          schedLowest = value;
-          $("#sched-lowest").text("Lowest recorded value is " + value);
-        }
-      }
-      else if (which === "ws") {
-        if (value > wsHighest) {
-          wsHighest = value;
-          $("#ws-highest").text("Highest recorded value is " + value);
-        }
-        if (value < wsLowest) {
-          wsLowest = value;
-          $("#ws-lowest").text("Lowest recorded value is " + value);
+        else if (which === "ws") {
+          if (value > wsHighest) {
+            wsHighest = value;
+            $("#ws-highest").text("Highest recorded value is " + value);
+          }
+          if (value < wsLowest) {
+            wsLowest = value;
+            $("#ws-lowest").text("Lowest recorded value is " + value);
+          }
         }
       }
+
+      function getTime() {
+        var d = new Date();
+        return d.toLocaleTimeString();
+      }
+
+      function doPoll() {
+        $.getJSON('https://f3dc5044859d.ngrok.io/pi/sensors/dht/temperature',
+          function (result) {
+            addDataPoint(result, schedData, schedChart);
+            updateRecords(result.value, "sched");
+            setTimeout(doPoll, 10000);
+          });
+      }
+
+      doPoll();
+
+      var socket = new WebSocket('ws://f3dc5044859d.ngrok.io/pi/sensors/dht/temperature'); //#A
+
+      socket.onmessage = function (event) { //#B
+        var result = JSON.parse(event.data);
+        addDataPoint(result, wsData, wsChart);
+        updateRecords(result.value, "ws");
+      };
+
+      socket.onerror = function (error) { //#C
+        console.log('WebSocket error!');
+        console.log(error);
+      };
     }
-
-    function getTime() {
-      var d = new Date();
-      return d.toLocaleTimeString();
-    }
-
-    function doPoll() {
-      $.getJSON('http://devices.webofthings.io/pi/sensors/temperature/value',
-        function (result) {
-          addDataPoint(result, schedData, schedChart);
-          updateRecords(result.value, "sched");
-          setTimeout(doPoll, 10000);
-        });
-    }
-
-    doPoll();
-
-    var socket = new WebSocket('ws://devices.webofthings.io/pi/sensors/temperature'); //#A
-
-    socket.onmessage = function (event) { //#B
-      var result = JSON.parse(event.data);
-      addDataPoint(result, wsData, wsChart);
-      updateRecords(result.value, "ws");
-    };
-
-    socket.onerror = function (error) { //#C
-      console.log('WebSocket error!');
-      console.log(error);
-    };
   });
 
   </script>
