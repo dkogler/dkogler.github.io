@@ -66,19 +66,19 @@
 
 			socket.onopen = function (event) {
 				console.log("OPENED SUCCESSFULLY");
-				$(updateElement).html("Awaiting update");
+				$(updateElement).text("Awaiting update");
 			}
 		
 			socket.onmessage = function (event) {
 				var result = JSON.parse(event.data);
 				console.log(event.data);
-				$(updateElement).html("" + result.value);
+				$(updateElement).text("" + result.value);
 			};
 
 			socket.onerror = function (error) {
 				console.log('WebSocket error!');
 				console.log(error);
-				$(updateElement).html("ERROR");
+				$(updateElement).text("ERROR");
 			};
 		}
 	});
