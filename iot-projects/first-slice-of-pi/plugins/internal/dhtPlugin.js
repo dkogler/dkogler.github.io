@@ -20,7 +20,7 @@ function connectHardware() {
 	var sensorDriver = require('node-dht-sensor');
 	sensor = {
 		initialize: function () {
-			return sensorDriver.initialize(device.model, device.gpio);
+			sensorDriver.initialize(device.model, device.gpio);
 		},
 		read: function () {
 			var readout = sensorDriver.read();
