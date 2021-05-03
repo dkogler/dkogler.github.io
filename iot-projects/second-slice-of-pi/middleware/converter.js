@@ -3,11 +3,6 @@ var json2html = require('node-json2html');
 module.exports = function() {
 	return function (req, res, next) {
 		if (req.result) {
-			if (req.accepts('json')) {
-				console.log("sending json");
-				res.send(req.result);
-				return;
-			}
 			if (req.accepts('html')) {
 				var transform = {'<>': 'div', 'html': [
 					{'<>': 'p', 'html': [
