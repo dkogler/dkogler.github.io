@@ -1,8 +1,8 @@
-var resources = require('./../../resources/model');
+const resources = require('./../../resources/model');
 
-var actuator;
-var model = resources.pi.actuators.leds;
-var pluginName = resources.pi.actuators.leds[1].name + " " + resources.pi.actuators.leds[2].name;
+var actuator1, actuator2;
+const model = resources.pi.actuators.leds;
+const pluginName = resources.pi.actuators.leds[1].name + " " + resources.pi.actuators.leds[2].name;
 
 exports.start = function (params) {
 	connectHardware();
@@ -18,7 +18,7 @@ exports.stop = function () {
 };
 
 function connectHardware() {
-	var Gpio = require('onoff').Gpio;
+	const Gpio = require('onoff').Gpio;
 	actuator1 = new Gpio(model[1].gpio, 'out');
 	actuator2 = new Gpio(model[2].gpio, 'out');
 }

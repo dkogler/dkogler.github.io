@@ -1,8 +1,8 @@
-var WebSocketServer = require('ws').Server,
+const WebSocketServer = require('ws').Server,
 	resources = require('./../resources/model'),
 	utils = require('./../utils/utils');
 
-var refreshRate = 10;
+const refreshRate = 10;
 
 exports.listen = function (server) {
 	var wss = new WebSocketServer({server: server});

@@ -68,8 +68,11 @@
             "name": "Actions List",
             "description": "Actions available with this Pi",
             "resources": {
+                "link": "/pi/actions/resources",
+                "name": "Action Resources",
+                "description": "List of action resources for this Pi",
                 "ledState1": {
-                    "link": "/pi/actions/ledState1",
+                    "link": "/pi/actions/resources/ledState1",
 					"name": "LED State 1",
                     "description": "Changes the state of LED 1",
                     "values": {
@@ -80,7 +83,7 @@
                     }
                 },
                 "ledState2": {
-                    "link": "/pi/actions/ledState2",
+                    "link": "/pi/actions/resources/ledState2",
 					"name": "LED State 2",
                     "description": "Changes the state of LED 2",
                     "values": {

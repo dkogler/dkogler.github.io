@@ -1,8 +1,8 @@
-var httpServer = require('./servers/http'),
+const httpServer = require('./servers/http'),
 	wsServer = require('./servers/websockets'),
 	resources = require('./resources/model');
 
-var pirPlugin = require('./plugins/internal/pirPlugin'),
+const pirPlugin = require('./plugins/internal/pirPlugin'),
 	dhtPlugin = require('./plugins/internal/dhtPlugin'),
 	ledsPlugin = require('./plugins/internal/ledsPlugin');
 
@@ -10,7 +10,7 @@ pirPlugin.start({});
 dhtPlugin.start({'frequency': 2000});
 ledsPlugin.start({});
 
-var server = httpServer.listen(resources.pi.port, function () {
+const server = httpServer.listen(resources.pi.port, function () {
 	wsServer.listen(server);
 	console.log("Running the Pi on port " + resources.pi.port);
 });

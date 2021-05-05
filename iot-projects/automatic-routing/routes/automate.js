@@ -1,4 +1,4 @@
-var express = require('express');
+const express = require('express');
 
 let createRouter = function (rootResource){
 	let router = express.Router();
@@ -11,8 +11,10 @@ let createRouter = function (rootResource){
 function generateRoute(router, resource){
     if (resource.link){
         router.route(resource.link).get(function (req, res, next){
-            res.links(populateLinks(resource));
+            let links = populateLinks(resource);
+            res.links(links);
             req.result = resource;
+            req.links = links;
             next();
         });
     }

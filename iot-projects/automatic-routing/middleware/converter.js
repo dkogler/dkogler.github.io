@@ -1,4 +1,4 @@
-var json2html = require('node-json2html');
+const json2html = require('node-json2html');
 
 module.exports = function() {
 	return function (req, res, next) {
@@ -19,7 +19,10 @@ module.exports = function() {
 					]},
 				]};
 				console.log("sending html");
-				res.send(json2html.transform(req.result, transform));
+                let response = json2html.transform(req.result, transform);
+                let links = generateLinks(req.links);
+                
+				res.send(response + links);
 				return;
 			}
 			console.log("sending json");
@@ -30,3 +33,11 @@ module.exports = function() {
 		next();
 	};
 };
+
+function generateLinks(linkList){
+    let html = "<h4> Links </h4>";
+    for (link in linkList){
+        html += "<a href="+linkList[link]+">"+link+"</a><br>";
+    }
+    return html;
+}
