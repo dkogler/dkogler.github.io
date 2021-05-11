@@ -7,6 +7,8 @@ var pirPlugin = require('./plugins/internal/pirPlugin'),
 pirPlugin.start({});
 dhtPlugin.start({'frequency': 2000});
 
+resources.pi.port = 8686;
+
 var server = httpServer.listen(resources.pi.port, function () {
 	console.log("Running the Pi on port " + resources.pi.port);
 });

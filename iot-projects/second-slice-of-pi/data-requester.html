@@ -60,12 +60,12 @@
 			
 			xhttp.onreadystatechange = function() {
 				if (this.readyState === 4 && this.status === 200){
-					console.log(xhttp.responseText);
+					console.log(this.responseText);
 					$('#data').html(this.responseText);
 				}
 				else if (this.readyState === 4){
 					console.log("ERROR");
-					console.log(xhttp.responseText);
+					console.log(this.responseText);
 					$('#data').text("ERROR");
 				}
 			}

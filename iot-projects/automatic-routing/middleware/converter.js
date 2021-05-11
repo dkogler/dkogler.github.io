@@ -19,7 +19,7 @@ module.exports = function() {
 					]},
 				]};
 				console.log("sending html");
-				res.send(json2html.transform(req.result, transform));
+				res.send(json2html.transform(req.result, transform)+"\n");
 				return;
 			}
 			console.log("sending json");
