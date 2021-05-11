@@ -1,9 +1,9 @@
-var resources = require('./../../resources/model');
+const resources = require('./../../resources/model');
 
-var interval, sensor;
-var model = resources.pi.sensors.dht;
-var pluginName = resources.pi.sensors.dht.name;
-var localParams = {'frequency': 2000};
+var sensor;
+const model = resources.pi.sensors.dht;
+const pluginName = resources.pi.sensors.dht.name;
+const localParams = {'frequency': 2000};
 
 exports.start = function (params) {
 	localParams = params;
@@ -16,7 +16,7 @@ exports.stop = function () {
 };
 
 function connectHardware() {
-	var sensorDriver = require('node-dht-sensor');
+	const sensorDriver = require('node-dht-sensor');
 	sensor = {
 		initialize: function () {
 			return sensorDriver.initialize(22, model.gpio);

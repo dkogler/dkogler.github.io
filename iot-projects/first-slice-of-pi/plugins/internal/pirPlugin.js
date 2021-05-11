@@ -1,8 +1,8 @@
-var resources = require('./../../resources/model');
+const resources = require('./../../resources/model');
 
 var sensor;
-var device = resources.pi.sensors.pir;
-var pluginName = resources.pi.sensors.pir.name;
+const device = resources.pi.sensors.pir;
+const pluginName = resources.pi.sensors.pir.name;
 
 
 exports.start = function (params) {
@@ -16,7 +16,7 @@ exports.stop = function () {
 };
 
 function connectHardware() {
-	var Gpio = require('onoff').Gpio;
+	const Gpio = require('onoff').Gpio;
 	sensor = new Gpio(device.gpio, 'in', 'both');
 	sensor.watch(function (err, value) {
 		if (err) {

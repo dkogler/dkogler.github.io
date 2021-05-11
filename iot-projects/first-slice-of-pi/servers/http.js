@@ -1,9 +1,9 @@
-var express = require('express'),
+const express = require('express'),
 	actuatorRoutes = require('./../routes/actuators'),
 	sensorRoutes = require('./../routes/sensors'),
 	cors = require('cors');
 	
-var app = express();
+const app = express();
 
 app.use(cors());
 
