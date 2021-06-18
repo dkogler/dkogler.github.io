@@ -45,7 +45,7 @@ var background = function (window) {
             var backgroundFill = draw.rect(canvasWidth,ground.y,'midnightblue');
             background.addChild(backgroundFill);
 
-            var lowerBackground = draw.rect(canvasWidth, canvasHeight-groundY-10, 'forestgreen');
+            var lowerBackground = draw.rect(canvasWidth, canvasHeight-groundY-10, 'darkblue');
             background.addChild(lowerBackground);
             lowerBackground.y = groundY+10;
 
