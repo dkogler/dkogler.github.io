@@ -65,10 +65,7 @@ async function partition(array, left, right){
         }
     }
 
-    if (left === right){
-        left++;
-    }
-    return left;
+    return left+1;
 }
 
 // TODO 1: Implement swap
