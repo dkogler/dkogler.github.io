@@ -10,12 +10,16 @@ http.createServer(function(req, res) {
     var type = args[1] === "html" ? "text/html" : "text/plain";
 
     request(url, function (error, response, body) {
+        if (!body || !response || (error === null && response.statusCode !== 200)){
+            res.end(response.statusCode + "\n");
+            return;
+        }
         if (!error && response.statusCode === 200) {
-            res.writeHead(200, {'Content-Type': type})
+            res.writeHead(200, {'Content-Type': type});
             res.write(body);
         }
         else {
-            res.writeHead(200, {'Content-Type': "text/plain"})
+            res.writeHead(200, {'Content-Type': "text/plain"});
             res.write(error);
         }
         res.end();
