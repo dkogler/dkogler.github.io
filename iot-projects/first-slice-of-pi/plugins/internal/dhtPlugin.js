@@ -3,7 +3,7 @@ const resources = require('./../../resources/model');
 var interval, sensor;
 const device = resources.pi.sensors.dht;
 const pluginName = resources.pi.sensors.dht.name;
-const localParams = {'frequency': 2000};
+let localParams = {'frequency': 2000};
 
 exports.start = function (params) {
 	localParams = params ? params : localParams;

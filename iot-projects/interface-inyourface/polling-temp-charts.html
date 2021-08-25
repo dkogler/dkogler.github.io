@@ -175,7 +175,7 @@
       }
 
       function doPoll() {
-        $.getJSON('https://f3dc5044859d.ngrok.io/pi/sensors/dht/temperature',
+        $.getJSON('https://192.168.1.250:8484/pi/sensors/dht/temperature',
           function (result) {
             addDataPoint(result, schedData, schedChart);
             updateRecords(result.value, "sched");
@@ -185,7 +185,7 @@
 
       doPoll();
 
-      var socket = new WebSocket('ws://f3dc5044859d.ngrok.io/pi/sensors/dht/temperature'); //#A
+      var socket = new WebSocket('ws://localhost:8484/pi/sensors/dht/temperature'); //#A
 
       socket.onmessage = function (event) { //#B
         var result = JSON.parse(event.data);

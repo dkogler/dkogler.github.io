@@ -23,6 +23,7 @@
 				"name": "DHT22 Sensor",
 				"description": "A dual temperature and humidity sensor",
 				"gpio": 17,
+				"model": 22,
 				"temperature": {
                     "link": "/pi/sensors/dht/temperature",
 					"name": "Temperature Sensor",
