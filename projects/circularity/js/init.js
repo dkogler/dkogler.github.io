@@ -81,6 +81,7 @@ var init = function (window) {
             
             // TODO 5 Part 2 : Call checkCircleBounds on your circles.
            
+            debugger;
 
             // TODO 8 : Iterate over the array
             for (var i = 0; i < circles.length; i++){
