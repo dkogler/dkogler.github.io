@@ -46,7 +46,7 @@
          *
          * See http://www.createjs.com/Docs/EaselJS/classes/Container.html
          * 
-         * It's a shitty way to inherit in JS, but it's our best choice with the 
+         * It's an unfortunate way to inherit in JS, but it's our best choice with the 
          * way CreateJS is implemented.
          */
         var p = Halle.prototype = new createjs.Container();

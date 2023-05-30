@@ -9,6 +9,7 @@
         KEYCODE_SPACE = 32,
         KEYCODE_UP = 38,
         KEYCODE_LEFT = 37,
+        KEYCODE_DOWN = 40,
         KEYCODE_RIGHT = 39,
         KEYCODE_Q = 81,
         KEYCODE_E = 69,
@@ -66,18 +67,19 @@
         }
         
         function onKeyDown(e) {
-            if (activeKeys[KEYCODE_E]) {
+            if (activeKeys[KEYCODE_RIGHT]) {
                 player.jumpfly();
-            } else if (activeKeys[KEYCODE_W]) {
+            } else if (activeKeys[KEYCODE_UP]) {
                 player.jump();
             } else if (activeKeys[KEYCODE_Q]) {
                 player.die();
-            } else if (activeKeys[KEYCODE_S]) {
+                setTimeout(function() {
+                    document.location.reload()
+                    alert("press enter to start over");
+                }, 1100);
+            } else if (activeKeys[KEYCODE_DOWN]) {
                 player.duckin();
                 _state = 'ducking';
-            }
-            
-            if (activeKeys[KEYCODE_UP]) { 
             }
             
             if (activeKeys[KEYCODE_SPACE]) { 
