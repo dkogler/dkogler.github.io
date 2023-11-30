@@ -1,5 +1,9 @@
 const httpServer = require('./servers/http'),
-	resources = require('./resources/model');
+
+
+const resources = require('./resources/model');
+
+
 
 const pirPlugin = require('./plugins/internal/pirPlugin'),
 	dhtPlugin = require('./plugins/internal/dhtPlugin');
