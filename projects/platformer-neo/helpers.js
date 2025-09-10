@@ -10,6 +10,10 @@ function registerSetup(setup) {
 function main() {
   ctx.clearRect(0, 0, 1400, 750); //erase the screen so you can draw everything in it's most current position
 
+  if (shouldDrawGrid) {
+    drawGrid();
+  }
+
   if (player.deadAndDeathAnimationDone) {
     deathOfPlayer();
     return;
@@ -121,6 +125,7 @@ function changeAnimationType() {
 function debug() {
   debugVar = true;
 
+  // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText
   ctx.fillText("xs" + player.speedX + " x: " + player.x, 500, 200);
   ctx.fillText("ys" + player.speedY + " y: " + player.y, 500, 250);
 
@@ -411,22 +416,55 @@ function playerFrictionAndGravity() {
 
 function drawPlatforms() {
   for (var i = 0; i < platforms.length; i++) {
-    ctx.fillStyle = "grey";
-    ctx.fillRect(
-      platforms[i].x,
-      platforms[i].y,
-      platforms[i].width,
-      platforms[i].height
-    );
+    // Check if platform should move horizontally
+    if (platforms[i].minX !== null && platforms[i].maxX !== null) {
+      // Move platform based on speed and direction
+      platforms[i].x += platforms[i].speed * platforms[i].direction;
+      
+      // Reverse direction if platform reaches minX or maxX bounds
+      if (platforms[i].x < platforms[i].minX) {
+        platforms[i].x = platforms[i].minX;
+        platforms[i].direction *= -1; // Change direction to right
+      } else if (platforms[i].x > platforms[i].maxX) {
+        platforms[i].x = platforms[i].maxX;
+        platforms[i].direction *= -1; // Change direction to left
+      }
+    }
+    
+    // Draw the platform
+    const { color, x, y, width, height } = platforms[i];
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, width, height);
   }
 }
 
+function toggleGrid() {
+  shouldDrawGrid = true;
+}
+
 function drawGrid() {
+  // vertical grid lines
   for (let i = 100; i < canvas.width; i += 100) {
-    createPlatform(i, canvas.height, -1, -canvas.height);
+    createPlatform(i, canvas.height, -1, -canvas.height + 35);
+    // add text indicating x value at top of game
+    ctx.font = "125% serif";
+    ctx.fillText(
+      i, // text
+      i - 15, // x location
+      25 // y location
+    );
   }
+
+  // horizontal grid lines
   for (let i = 100; i < canvas.height; i += 100) {
-    createPlatform(canvas.width, i, -canvas.width, -1);
+    createPlatform(canvas.width, i, -canvas.width + 45, -1);
+    // add text indicating y value at left side of game
+    ctx.font = "125% serif";
+    ctx.fillText(
+      i, // text
+      10, // x location
+      i + 5 // y location
+    );
   }
 }
 
@@ -497,9 +535,24 @@ function drawCollectables() {
       ctx.globalAlpha = 1;
     }
 
+    // Horizontal movement logic for collectables
+    if (collectables[i].minX !== null && collectables[i].maxX !== null) {
+      // Move collectable based on speed and direction
+      collectables[i].x += collectables[i].speed * collectables[i].direction;
+      
+      // Reverse direction if collectable reaches minX or maxX bounds
+      if (collectables[i].x < collectables[i].minX) {
+        collectables[i].x = collectables[i].minX;
+        collectables[i].direction *= -1; // Change direction to right
+      } else if (collectables[i].x > collectables[i].maxX) {
+        collectables[i].x = collectables[i].maxX;
+        collectables[i].direction *= -1; // Change direction to left
+      }
+    }
+
     //gravity
-    collectables[i].speedy = collectables[i].speedy + collectables[i].gravity;
-    collectables[i].y = collectables[i].y + collectables[i].speedy;
+    collectables[i].speedY = collectables[i].speedY + collectables[i].gravity;
+    collectables[i].y = collectables[i].y + collectables[i].speedY;
 
     // Check for collision with platforms in order to bounce
     for (var j = 0; j < platforms.length; j++) {
@@ -510,8 +563,8 @@ function drawCollectables() {
         collectables[i].y + collectableHeight > platforms[j].y
       ) {
         //bottom of collectable is below top of platform
-        collectables[i].y = collectables[i].y - collectables[i].speedy;
-        collectables[i].speedy *= -collectables[i].bounce;
+        collectables[i].y = collectables[i].y - collectables[i].speedY;
+        collectables[i].speedY *= -collectables[i].bounce;
       }
     }
   }
@@ -530,8 +583,18 @@ function collectablesCollide() {
   }
 }
 
-function createPlatform(x, y, width, height) {
-  platforms.push({ x, y, width, height });
+function createPlatform(x, y, width, height, color = "grey", minX = null, maxX = null, speed = 1) {
+  platforms.push({ 
+    x, 
+    y, 
+    width, 
+    height, 
+    color,
+    minX,
+    maxX,
+    speed,
+    direction: 1 // 1 for right, -1 for left
+  });
 }
 
 function createCannon(
@@ -588,20 +651,24 @@ function createCannon(
   }
 }
 
-function createCollectable(type, x, y, gravity = 0.1, bounce = 1) {
+function createCollectable(type, x, y, gravity = 0, bounce = 1, minX = null, maxX = null, speed = 1) {
   if (type !== "") {
-    var img = document.createElement("img"); // this is not necessary; we could simply make a single element for each collectable type in the HTML instead
-    img.src = collectableList[type].image;
-    img.id = "image" + collectables.length;
+    var image = document.createElement("img");
+    image.src = collectableList[type].image;
+    image.id = "image" + collectables.length;
     collectables.push({
-      image: img,
-      x: x,
-      y: y,
-      speedy: 0,
+      image,
+      x,
+      y,
+      speedY: 0,
       collected: false,
       alpha: 2,
-      gravity: gravity,
-      bounce: bounce,
+      gravity,
+      bounce,
+      minX,
+      maxX,
+      speed,
+      direction: 1 // 1 for right, -1 for left
     });
   }
 }
