@@ -420,7 +420,7 @@ function drawPlatforms() {
     if (platforms[i].minX !== null && platforms[i].maxX !== null) {
       // Move platform based on speed and direction
       platforms[i].x += platforms[i].speed * platforms[i].direction;
-      
+
       // Reverse direction if platform reaches minX or maxX bounds
       if (platforms[i].x < platforms[i].minX) {
         platforms[i].x = platforms[i].minX;
@@ -430,7 +430,7 @@ function drawPlatforms() {
         platforms[i].direction *= -1; // Change direction to left
       }
     }
-    
+
     // Draw the platform
     const { color, x, y, width, height } = platforms[i];
     ctx.fillStyle = color;
@@ -457,7 +457,7 @@ function drawGrid() {
 
   // horizontal grid lines
   for (let i = 100; i < canvas.height; i += 100) {
-    createPlatform(canvas.width, i, -canvas.width + 45, -1);
+    //createPlatform(canvas.width, i, -canvas.width + 45, -1);
     // add text indicating y value at left side of game
     ctx.font = "125% serif";
     ctx.fillText(
@@ -539,7 +539,7 @@ function drawCollectables() {
     if (collectables[i].minX !== null && collectables[i].maxX !== null) {
       // Move collectable based on speed and direction
       collectables[i].x += collectables[i].speed * collectables[i].direction;
-      
+
       // Reverse direction if collectable reaches minX or maxX bounds
       if (collectables[i].x < collectables[i].minX) {
         collectables[i].x = collectables[i].minX;
@@ -583,17 +583,26 @@ function collectablesCollide() {
   }
 }
 
-function createPlatform(x, y, width, height, color = "grey", minX = null, maxX = null, speed = 1) {
-  platforms.push({ 
-    x, 
-    y, 
-    width, 
-    height, 
+function createPlatform(
+  x,
+  y,
+  width,
+  height,
+  color = "grey",
+  minX = null,
+  maxX = null,
+  speed = 1
+) {
+  platforms.push({
+    x,
+    y,
+    width,
+    height,
     color,
     minX,
     maxX,
     speed,
-    direction: 1 // 1 for right, -1 for left
+    direction: 1, // 1 for right, -1 for left
   });
 }
 
@@ -651,7 +660,16 @@ function createCannon(
   }
 }
 
-function createCollectable(type, x, y, gravity = 0, bounce = 1, minX = null, maxX = null, speed = 1) {
+function createCollectable(
+  type,
+  x,
+  y,
+  gravity = 0,
+  bounce = 1,
+  minX = null,
+  maxX = null,
+  speed = 1
+) {
   if (type !== "") {
     var image = document.createElement("img");
     image.src = collectableList[type].image;
@@ -668,7 +686,7 @@ function createCollectable(type, x, y, gravity = 0, bounce = 1, minX = null, max
       minX,
       maxX,
       speed,
-      direction: 1 // 1 for right, -1 for left
+      direction: 1, // 1 for right, -1 for left
     });
   }
 }
